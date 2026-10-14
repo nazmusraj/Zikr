@@ -2,6 +2,7 @@ package com.nurzikr.tasbih
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -28,11 +29,12 @@ class MainActivity : ComponentActivity() {
         webView = WebView(this).apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
-            settings.databaseEnabled = true
             settings.mediaPlaybackRequiresUserGesture = false
             settings.cacheMode = WebSettings.LOAD_DEFAULT
+            settings.allowContentAccess = false
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
+            setBackgroundColor(Color.rgb(7, 13, 23))
             addJavascriptInterface(AndroidHapticBridge(this@MainActivity), "AndroidBridge")
             loadUrl("file:///android_asset/index.html")
         }
