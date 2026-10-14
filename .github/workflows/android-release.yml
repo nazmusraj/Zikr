@@ -37,6 +37,9 @@ jobs:
         run: |
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
 
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
       - name: Validate signing secrets
         run: |
           test -n "$ANDROID_KEYSTORE_BASE64" || (echo "Missing ANDROID_KEYSTORE_BASE64" && exit 1)
