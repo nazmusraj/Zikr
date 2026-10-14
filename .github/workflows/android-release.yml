@@ -17,7 +17,6 @@ jobs:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/nur-zikr-release.jks
 
     steps:
       - name: Check out source
@@ -45,10 +44,12 @@ jobs:
           test -n "$ANDROID_KEY_PASSWORD" || (echo "Missing ANDROID_KEY_PASSWORD" && exit 1)
 
       - name: Restore release keystore
-        run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_KEYSTORE_PATH"
+        run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/nur-zikr-release.jks"
 
       - name: Build and lint signed release
-        run: ./gradlew --no-daemon clean assembleRelease lintRelease
+        run: |
+          export ANDROID_KEYSTORE_PATH="$RUNNER_TEMP/nur-zikr-release.jks"
+          ./gradlew --no-daemon clean assembleRelease lintRelease
 
       - name: Prepare and verify release APK
         run: |
