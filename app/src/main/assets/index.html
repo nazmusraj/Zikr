@@ -1,0 +1,2532 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#09111E" id="meta-theme-color" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Nūr Zikr — Liquid Glass Tasbih & Spiritual Tracker</title>
+  <style>
+    :root[data-theme="night"] {
+      --bg-primary: #070D17;
+      --bg-secondary: #0D1726;
+      --orb-1: rgba(16, 185, 129, 0.25);
+      --orb-2: rgba(245, 158, 11, 0.16);
+      --orb-3: rgba(56, 189, 248, 0.15);
+      --glass-bg: rgba(18, 30, 49, 0.56);
+      --glass-bg-elevated: rgba(26, 42, 68, 0.68);
+      --glass-bg-pill: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-border-highlight: rgba(255, 255, 255, 0.28);
+      --glass-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --accent-primary: #34D399;
+      --accent-secondary: #10B981;
+      --accent-gold: #FBBF24;
+      --accent-gold-soft: rgba(251, 191, 36, 0.16);
+      --accent-emerald-soft: rgba(52, 211, 153, 0.16);
+      --accent-glow: rgba(52, 211, 153, 0.38);
+      --danger: #F87171;
+      --ring-track: rgba(255, 255, 255, 0.09);
+      --nav-bg: rgba(11, 19, 33, 0.78);
+      --pattern-opacity: 0.04;
+    }
+
+    :root[data-theme="day"] {
+      --bg-primary: #F4F3EE;
+      --bg-secondary: #EAE7DF;
+      --orb-1: rgba(15, 118, 110, 0.18);
+      --orb-2: rgba(217, 119, 6, 0.15);
+      --orb-3: rgba(14, 165, 233, 0.12);
+      --glass-bg: rgba(255, 255, 255, 0.62);
+      --glass-bg-elevated: rgba(255, 255, 255, 0.82);
+      --glass-bg-pill: rgba(15, 118, 110, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.75);
+      --glass-border-highlight: rgba(255, 255, 255, 0.95);
+      --glass-shadow: 0 14px 34px -8px rgba(15, 23, 42, 0.09), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --accent-primary: #0D9488;
+      --accent-secondary: #0F766E;
+      --accent-gold: #D97706;
+      --accent-gold-soft: rgba(217, 119, 6, 0.13);
+      --accent-emerald-soft: rgba(13, 148, 136, 0.12);
+      --accent-glow: rgba(13, 148, 136, 0.25);
+      --danger: #DC2626;
+      --ring-track: rgba(15, 23, 42, 0.08);
+      --nav-bg: rgba(255, 255, 255, 0.78);
+      --pattern-opacity: 0.03;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Bengali", "Noto Naskh Arabic", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.35s ease;
+    }
+
+    /* Ambient Liquid Background Orbs & Sacred Geometry Watermark */
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 0%, var(--bg-secondary), var(--bg-primary) 75%);
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(65px);
+      transition: background 0.5s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .orb-1 {
+      width: 340px;
+      height: 340px;
+      top: -80px;
+      left: -60px;
+      background: var(--orb-1);
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      top: 38%;
+      right: -90px;
+      background: var(--orb-2);
+    }
+
+    .orb-3 {
+      width: 320px;
+      height: 320px;
+      bottom: -80px;
+      left: 15%;
+      background: var(--orb-3);
+    }
+
+    .sacred-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: var(--pattern-opacity);
+      background-image: radial-gradient(circle at center, currentColor 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* App Shell Container (Android Mobile Frame on Desktop, Native Fullscreen on Phone) */
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 460px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 16px 104px;
+    }
+
+    @media (min-width: 540px) {
+      body {
+        padding: 18px 0;
+      }
+      .app-wrapper {
+        min-height: calc(100vh - 36px);
+        border-radius: 38px;
+        border: 1.5px solid var(--glass-border-highlight);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+        background: rgba(255, 255, 255, 0.01);
+        backdrop-filter: blur(6px);
+        overflow: hidden;
+      }
+    }
+
+    /* Liquid Glass Surface Base */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-top-color: var(--glass-border-highlight);
+      box-shadow: var(--glass-shadow);
+      border-radius: 24px;
+      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Android Status & Header Bar */
+    .android-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 8px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.3px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 8px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #06121E;
+      font-weight: 800;
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+
+    .brand-subtitle {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      border: 1px solid var(--glass-border);
+      border-top-color: var(--glass-border-highlight);
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.18s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.92);
+    }
+
+    .icon-btn.active-toggle {
+      border-color: var(--accent-primary);
+      background: var(--accent-emerald-soft);
+      color: var(--accent-primary);
+    }
+
+    /* Quick Top Summary Strip */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .mini-stat {
+      padding: 11px 12px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .mini-stat-label {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+    }
+
+    .mini-stat-value {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mini-stat-value.gold {
+      color: var(--accent-gold);
+    }
+
+    .mini-stat-value.emerald {
+      color: var(--accent-primary);
+    }
+
+    /* Zikr Carousel Selector */
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-secondary);
+    }
+
+    .lang-pill-group {
+      display: flex;
+      gap: 4px;
+      background: var(--glass-bg-pill);
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .lang-pill {
+      font-size: 10.5px;
+      padding: 3px 7px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .lang-pill.active {
+      background: var(--accent-primary);
+      color: #04131A;
+    }
+
+    .zikr-carousel {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 2px 10px;
+      scrollbar-width: none;
+    }
+
+    .zikr-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .zikr-chip {
+      flex: 0 0 auto;
+      padding: 9px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 122px;
+      transition: all 0.2s ease;
+    }
+
+    .zikr-chip.selected {
+      border-color: var(--accent-primary);
+      background: linear-gradient(135deg, var(--accent-emerald-soft), var(--glass-bg-elevated));
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+
+    .zikr-chip-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .zikr-chip-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .zikr-chip-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      background: var(--glass-bg-pill);
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .zikr-chip-ar {
+      font-size: 13px;
+      color: var(--accent-gold);
+      font-family: "Noto Naskh Arabic", "Traditional Arabic", serif;
+      direction: rtl;
+    }
+
+    .add-zikr-chip {
+      flex: 0 0 auto;
+      padding: 9px 14px;
+      border-radius: 16px;
+      border: 1px dashed var(--accent-primary);
+      background: var(--accent-emerald-soft);
+      color: var(--accent-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Active Zikr Display Card */
+    .active-zikr-card {
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .zikr-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--accent-gold-soft);
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+
+    .zikr-arabic-hero {
+      font-size: 27px;
+      line-height: 1.45;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      font-family: "Noto Naskh Arabic", "Amiri", serif;
+      text-shadow: 0 2px 14px var(--accent-glow);
+    }
+
+    .zikr-translit-hero {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 4px;
+    }
+
+    .zikr-meaning-en {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+      margin-bottom: 3px;
+    }
+
+    .zikr-meaning-bn {
+      font-size: 12.5px;
+      color: var(--accent-gold);
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    /* Tactile Liquid Glass Tap Orb */
+    .orb-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 4px 0 14px;
+      position: relative;
+    }
+
+    .tasbih-orb-wrapper {
+      position: relative;
+      width: 228px;
+      height: 228px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress-ring-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      pointer-events: none;
+    }
+
+    .progress-ring-track {
+      fill: none;
+      stroke: var(--ring-track);
+      stroke-width: 8;
+    }
+
+    .progress-ring-fill {
+      fill: none;
+      stroke: url(#liquidEmeraldGrad);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .tasbih-orb-btn {
+      width: 194px;
+      height: 194px;
+      border-radius: 50%;
+      border: 1.5px solid var(--glass-border-highlight);
+      background: radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.24), var(--glass-bg-elevated) 58%, rgba(16, 185, 129, 0.18));
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      box-shadow:
+        0 18px 45px var(--accent-glow),
+        inset 0 2px 4px rgba(255, 255, 255, 0.45),
+        inset 0 -8px 20px rgba(16, 185, 129, 0.2);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+    }
+
+    .tasbih-orb-btn:active, .tasbih-orb-btn.pulse-active {
+      transform: scale(0.955);
+      box-shadow:
+        0 8px 25px var(--accent-glow),
+        inset 0 3px 8px rgba(255, 255, 255, 0.6),
+        inset 0 -4px 14px rgba(251, 191, 36, 0.35);
+    }
+
+    .orb-session-count {
+      font-size: 50px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 4px;
+    }
+
+    .orb-target-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      background: var(--glass-bg-pill);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .orb-tap-hint {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .ripple-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.55) 0%, rgba(251, 191, 36, 0.2) 60%, transparent 70%);
+      transform: scale(0);
+      animation: rippleAnim 0.65s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(3.2);
+        opacity: 0;
+      }
+    }
+
+    /* Session Micro Controls */
+    .orb-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .pill-action-btn {
+      padding: 7px 13px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.18s ease;
+    }
+
+    .pill-action-btn:hover, .pill-action-btn:active {
+      color: var(--text-primary);
+      border-color: var(--accent-primary);
+    }
+
+    /* Manual Add & Batch Entry Card */
+    .manual-add-card {
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .manual-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .manual-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .preset-pills-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .preset-add-btn {
+      padding: 9px 6px;
+      border-radius: 13px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg-pill);
+      color: var(--accent-primary);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .preset-add-btn:active {
+      transform: scale(0.94);
+      background: var(--accent-primary);
+      color: #04131A;
+    }
+
+    .manual-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .glass-input {
+      flex: 1;
+      padding: 10px 13px;
+      border-radius: 13px;
+      border: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.16);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    :root[data-theme="day"] .glass-input {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .glass-input:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .glass-select {
+      padding: 10px 10px;
+      border-radius: 13px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg-elevated);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .primary-glass-btn {
+      padding: 10px 16px;
+      border-radius: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #04131A;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 6px 16px var(--accent-glow);
+      transition: transform 0.15s ease;
+    }
+
+    .primary-glass-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Tab Panels */
+    .tab-panel {
+      display: none;
+      animation: fadeSlideIn 0.26s ease-out;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Analytics Period Switcher */
+    .period-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 5px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+
+    .period-tab-btn {
+      padding: 8px 6px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .period-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #04131A;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .analytics-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .kpi-card {
+      padding: 14px;
+      border-radius: 20px;
+    }
+
+    .kpi-card-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .kpi-card-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .kpi-card-sub {
+      font-size: 11.5px;
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .analysis-card {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .analysis-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .analysis-card-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+
+    /* Bar Chart & Time-of-Day Rows */
+    .bar-chart-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 6px;
+      height: 132px;
+      padding: 12px 4px 4px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 8px;
+    }
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .bar-val-top {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bar-pillar {
+      width: 100%;
+      max-width: 24px;
+      border-radius: 7px 7px 3px 3px;
+      background: linear-gradient(180deg, var(--accent-primary), rgba(16, 185, 129, 0.28));
+      min-height: 4px;
+      transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .bar-pillar.peak {
+      background: linear-gradient(180deg, var(--accent-gold), var(--accent-primary));
+      box-shadow: 0 0 12px var(--accent-gold-soft);
+    }
+
+    .bar-label-bottom {
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Spiritual Windows Breakdown ("When I Do Most") */
+    .window-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .window-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .window-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .window-progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--ring-track);
+      overflow: hidden;
+    }
+
+    .window-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-gold));
+      transition: width 0.35s ease;
+    }
+
+    /* Ranks & Milestones Styling */
+    .rank-hero-card {
+      padding: 18px;
+      margin-bottom: 14px;
+      text-align: center;
+      background: linear-gradient(145deg, var(--accent-emerald-soft), var(--glass-bg-elevated));
+    }
+
+    .rank-medallion-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.35), var(--glass-bg));
+      border: 1.5px solid var(--accent-gold);
+      box-shadow: 0 10px 28px var(--accent-gold-soft);
+    }
+
+    .rank-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .rank-badge-card {
+      padding: 14px;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0.62;
+    }
+
+    .rank-badge-card.unlocked {
+      opacity: 1;
+      border-color: var(--accent-gold);
+      background: linear-gradient(145deg, var(--accent-gold-soft), var(--glass-bg));
+    }
+
+    .rank-badge-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .rank-icon {
+      font-size: 24px;
+    }
+
+    .rank-status-pill {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--glass-bg-pill);
+      color: var(--text-secondary);
+    }
+
+    .rank-badge-card.unlocked .rank-status-pill {
+      background: var(--accent-gold);
+      color: #08121E;
+    }
+
+    .rank-target-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .rank-title-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 6px;
+    }
+
+    /* Bottom Liquid Glass Navigation Dock */
+    .bottom-nav-dock {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 428px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border-highlight);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px;
+      z-index: 30;
+    }
+
+    .nav-item-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 8px 4px;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item-btn .nav-icon {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .nav-item-btn.active {
+      background: var(--accent-emerald-soft);
+      color: var(--accent-primary);
+      font-weight: 700;
+    }
+
+    /* Toast & Milestone Unlock Banner */
+    .toast-banner {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120%);
+      background: var(--glass-bg-elevated);
+      backdrop-filter: blur(24px);
+      border: 1.5px solid var(--accent-gold);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5);
+      color: var(--text-primary);
+      padding: 12px 18px;
+      border-radius: 18px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      max-width: 90%;
+    }
+
+    .toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Modal Sheet for New Zikr & Android Info */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 410px;
+      padding: 20px;
+      border-radius: 26px;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient Liquid Glass Background -->
+  <div class="ambient-canvas">
+    <div class="ambient-orb orb-1" id="bg-orb-1"></div>
+    <div class="ambient-orb orb-2" id="bg-orb-2"></div>
+    <div class="ambient-orb orb-3" id="bg-orb-3"></div>
+    <div class="sacred-pattern"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-banner" id="toast-banner">
+    <span id="toast-icon">✨</span>
+    <span id="toast-text">Milestone Reached!</span>
+  </div>
+
+  <div class="app-wrapper">
+    <!-- Android Status Bar -->
+    <div class="android-status-bar">
+      <span id="android-clock">01:40</span>
+      <div class="status-icons">
+        <span id="status-sound-indicator">🔊 Bead</span>
+        <span>•</span>
+        <span>📳 Haptic</span>
+        <span>•</span>
+        <span>100% 🔋</span>
+      </div>
+    </div>
+
+    <!-- App Header Bar -->
+    <header class="top-bar">
+      <div class="brand-group">
+        <div class="brand-logo">۞</div>
+        <div>
+          <div class="brand-title">Nūr Zikr</div>
+          <div class="brand-subtitle">
+            <span id="current-rank-mini-badge">🌱 Seeker</span>
+            <span>•</span>
+            <span id="hijri-date-label">Spiritual Tasbih</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn active-toggle" id="btn-sound-toggle" title="Toggle Tap Sound" onclick="cycleSoundMode()">🔊</button>
+        <button class="icon-btn active-toggle" id="btn-vibrate-toggle" title="Toggle Vibration" onclick="toggleVibration()">📳</button>
+        <button class="icon-btn" id="btn-theme-toggle" title="Switch Day / Night Theme" onclick="toggleTheme()">🌙</button>
+      </div>
+    </header>
+
+    <!-- Top Summary Strip -->
+    <section class="summary-strip">
+      <div class="glass-card mini-stat">
+        <div class="mini-stat-label">Today</div>
+        <div class="mini-stat-value emerald" id="stat-today-total">0</div>
+      </div>
+      <div class="glass-card mini-stat">
+        <div class="mini-stat-label">Total Zikr</div>
+        <div class="mini-stat-value" id="stat-lifetime-total">0</div>
+      </div>
+      <div class="glass-card mini-stat">
+        <div class="mini-stat-label">Rank Tier</div>
+        <div class="mini-stat-value gold" id="stat-rank-short">Tier 1</div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 1: COUNTER & ZIKR STUDIO ================= -->
+    <main class="tab-panel active" id="tab-counter">
+      <div class="section-header-row">
+        <span class="section-label">Select Zikr / Dua</span>
+        <div class="lang-pill-group" role="group" aria-label="Language Display">
+          <button class="lang-pill active" id="lang-all" onclick="setLanguageMode('all')">All (AR/EN/বাং)</button>
+          <button class="lang-pill" id="lang-en" onclick="setLanguageMode('en')">AR + EN</button>
+          <button class="lang-pill" id="lang-bn" onclick="setLanguageMode('bn')">AR + বাংলা</button>
+        </div>
+      </div>
+
+      <!-- Horizontal Zikr Selector Carousel -->
+      <div class="zikr-carousel" id="zikr-carousel"></div>
+
+      <!-- Active Zikr Detail Card -->
+      <div class="glass-card active-zikr-card" id="active-zikr-card">
+        <div class="zikr-category-badge" id="active-zikr-badge">✨ Daily Tasbih • Target: 100</div>
+        <div class="zikr-arabic-hero" id="active-zikr-arabic">سُبْحَانَ اللَّهِ</div>
+        <div class="zikr-translit-hero" id="active-zikr-translit">SubhanAllah</div>
+        <div class="zikr-meaning-en" id="active-zikr-en">"Glory be to Allah"</div>
+        <div class="zikr-meaning-bn" id="active-zikr-bn">সুবহানাল্লাহ — আল্লাহ পবিত্র ও মহিমাময়</div>
+      </div>
+
+      <!-- Tactile Liquid Glass Counter Orb -->
+      <div class="orb-stage">
+        <div class="tasbih-orb-wrapper">
+          <svg class="progress-ring-svg" viewBox="0 0 228 228">
+            <defs>
+              <linearGradient id="liquidEmeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#34D399" />
+                <stop offset="100%" stop-color="#FBBF24" />
+              </linearGradient>
+            </defs>
+            <circle class="progress-ring-track" cx="114" cy="114" r="103"></circle>
+            <circle class="progress-ring-fill" id="orb-progress-circle" cx="114" cy="114" r="103" stroke-dasharray="647.17" stroke-dashoffset="647.17"></circle>
+          </svg>
+
+          <button class="tasbih-orb-btn" id="tasbih-orb-btn" onclick="handleTap(event)" aria-label="Tap to count Zikr">
+            <div class="orb-session-count" id="orb-session-count">0</div>
+            <div class="orb-target-label" id="orb-target-progress">Today: 0 / 100</div>
+            <div class="orb-tap-hint">Tap to Count</div>
+          </button>
+        </div>
+
+        <div class="orb-controls-row">
+          <button class="pill-action-btn" onclick="undoLastTap()">↩ Undo (-1)</button>
+          <button class="pill-action-btn" onclick="resetSessionCount()">🔄 Reset Session</button>
+          <button class="pill-action-btn" onclick="openAddZikrModal()">➕ Custom Zikr</button>
+        </div>
+      </div>
+
+      <!-- Manual Batch Add Card -->
+      <div class="glass-card manual-add-card">
+        <div class="manual-card-header">
+          <div class="manual-card-title">⚡ Quick & Manual Count Entry</div>
+          <span style="font-size: 11px; color: var(--text-secondary);" id="selected-zikr-total-pill">Lifetime: 0</span>
+        </div>
+
+        <div class="preset-pills-row">
+          <button class="preset-add-btn" onclick="addBatchCount(33, 'Quick +33')">+33</button>
+          <button class="preset-add-btn" onclick="addBatchCount(100, 'Quick +100')">+100</button>
+          <button class="preset-add-btn" onclick="addBatchCount(500, 'Quick +500')">+500</button>
+          <button class="preset-add-btn" onclick="addBatchCount(1000, 'Quick +1000')">+1000</button>
+        </div>
+
+        <div class="manual-input-row">
+          <input type="number" min="1" max="100000" placeholder="Enter count (e.g. 100)" class="glass-input" id="manual-count-input" />
+          <select class="glass-select" id="manual-time-window" title="When did you recite this?">
+            <option value="now">Just Now</option>
+            <option value="fajr">Fajr / Morning</option>
+            <option value="dhuhr">Dhuhr / Noon</option>
+            <option value="asr">Asr / Afternoon</option>
+            <option value="maghrib">Maghrib / Isha</option>
+            <option value="tahajjud">Tahajjud / Night</option>
+          </select>
+          <button class="primary-glass-btn" onclick="submitManualCount()">Add</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ================= TAB 2: ANALYTICS & INSIGHTS ================= -->
+    <section class="tab-panel" id="tab-analytics">
+      <div class="glass-card period-tabs">
+        <button class="period-tab-btn active" id="period-daily" onclick="setAnalyticsPeriod('daily')">Daily</button>
+        <button class="period-tab-btn" id="period-weekly" onclick="setAnalyticsPeriod('weekly')">Weekly</button>
+        <button class="period-tab-btn" id="period-monthly" onclick="setAnalyticsPeriod('monthly')">Monthly</button>
+        <button class="period-tab-btn" id="period-yearly" onclick="setAnalyticsPeriod('yearly')">Yearly</button>
+      </div>
+
+      <!-- 4 Key Analytics Metrics -->
+      <div class="analytics-kpi-grid">
+        <div class="glass-card kpi-card">
+          <div class="kpi-card-title" id="kpi-period-label">Selected Period Total</div>
+          <div class="kpi-card-val" id="kpi-period-total">0</div>
+          <div class="kpi-card-sub" id="kpi-period-avg">Avg 0 / day</div>
+        </div>
+        <div class="glass-card kpi-card">
+          <div class="kpi-card-title">Most Recited Zikr</div>
+          <div class="kpi-card-val" id="kpi-top-zikr-name" style="font-size: 16px;">—</div>
+          <div class="kpi-card-sub" id="kpi-top-zikr-share">0 times (0%)</div>
+        </div>
+        <div class="glass-card kpi-card">
+          <div class="kpi-card-title">Peak Spiritual Time</div>
+          <div class="kpi-card-val" id="kpi-peak-window" style="font-size: 15.5px;">—</div>
+          <div class="kpi-card-sub" id="kpi-peak-window-sub">Most active window</div>
+        </div>
+        <div class="glass-card kpi-card">
+          <div class="kpi-card-title">Active Streak</div>
+          <div class="kpi-card-val" id="kpi-streak-days">1 Day</div>
+          <div class="kpi-card-sub" id="kpi-total-sessions">0 logged entries</div>
+        </div>
+      </div>
+
+      <!-- Timeline Chart (Daily / Weekly / Monthly / Yearly) -->
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">
+          <span id="timeline-chart-title">📈 Activity Timeline</span>
+          <span style="font-size: 11.5px; color: var(--accent-primary);" id="timeline-chart-badge">Live</span>
+        </div>
+        <div class="analysis-card-subtitle" id="timeline-chart-subtitle">Recitation volume across the selected timeframe</div>
+        <div class="bar-chart-wrap" id="timeline-bar-chart"></div>
+      </div>
+
+      <!-- WHEN I DO MOST: Spiritual Prayer Window Distribution -->
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">
+          <span>🕰️ When I Recite Most</span>
+          <span style="font-size: 11px; color: var(--accent-gold);">Time-of-Day Rhythm</span>
+        </div>
+        <div class="analysis-card-subtitle">Breakdown across the 5 spiritual daily windows</div>
+        <div class="window-list" id="when-window-list"></div>
+      </div>
+
+      <!-- WHICH I DO MOST: Zikr Phrase Distribution -->
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">
+          <span>📿 Which Zikr I Recite Most</span>
+          <span style="font-size: 11px; color: var(--accent-primary);">Phrase Share</span>
+        </div>
+        <div class="analysis-card-subtitle">Comparison of your recitations by Zikr type in this period</div>
+        <div class="window-list" id="which-zikr-list"></div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: RANKS & MILESTONES ================= -->
+    <section class="tab-panel" id="tab-ranks">
+      <!-- Current Overall Rank Hero -->
+      <div class="glass-card rank-hero-card">
+        <div class="rank-medallion-lg" id="rank-hero-icon">🌱</div>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.9px; color: var(--accent-gold); font-weight: 700;" id="rank-hero-tier-label">Current Spiritual Rank</div>
+        <div style="font-size: 22px; font-weight: 800; margin: 3px 0;" id="rank-hero-title">Beginning Seeker</div>
+        <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 12px;" id="rank-hero-next-text">100 counts to unlock Salik (100)</div>
+        <div class="window-progress-track" style="height: 10px;">
+          <div class="window-progress-fill" id="rank-hero-progress" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="section-header-row">
+        <span class="section-label">Milestone Badges (100 → 10,000+)</span>
+        <span style="font-size: 11.5px; color: var(--accent-primary); font-weight: 700;" id="unlocked-badges-counter">0 / 6 Unlocked</span>
+      </div>
+
+      <!-- Milestone Badges Grid -->
+      <div class="rank-tiers-grid" id="rank-tiers-grid"></div>
+
+      <!-- Per-Zikr Rank Mastery Breakdown -->
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">
+          <span>🏅 Per-Zikr Rank Mastery</span>
+          <span style="font-size: 11px; color: var(--accent-gold);">100 • 500 • 1000 • 2000+</span>
+        </div>
+        <div class="analysis-card-subtitle">Individual milestone rank achieved for each Zikr phrase</div>
+        <div class="window-list" id="per-zikr-ranks-list"></div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: SETTINGS, DEMO DATA & ANDROID SETUP ================= -->
+    <section class="tab-panel" id="tab-settings">
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">🎨 Appearance, Audio & Haptics</div>
+        <div class="analysis-card-subtitle">Customize your Liquid Glass theme and tactile feedback</div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 13.5px; font-weight: 700;">Liquid Glass Theme</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary);">Switch between Fajr Pearl (Day) & Tahajjud (Night)</div>
+            </div>
+            <button class="primary-glass-btn" onclick="toggleTheme()" id="settings-theme-btn">Switch Theme</button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 13.5px; font-weight: 700;">Tap Sound Effect</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary);">Bead Click, Crystal Glass, Zen Pulse, or Mute</div>
+            </div>
+            <button class="pill-action-btn" onclick="cycleSoundMode()" id="settings-sound-btn">🔊 Bead Click</button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 13.5px; font-weight: 700;">Android Haptic Vibration</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary);">Tactile pulse on tap and milestone completion</div>
+            </div>
+            <button class="pill-action-btn" onclick="toggleVibration()" id="settings-vibrate-btn">📳 Enabled</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manage Custom Zikr & Sample Data -->
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">🗂️ Data & Analytics Preview</div>
+        <div class="analysis-card-subtitle">Test rich multi-month analytics or export your Zikr history</div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button class="primary-glass-btn" onclick="seedRichSampleData()">✨ Load Rich Sample History</button>
+          <button class="pill-action-btn" onclick="exportDataJson()">⬇ Export Backup (JSON)</button>
+          <button class="pill-action-btn" style="color: var(--danger);" onclick="clearAllHistory()">🗑 Reset All Counts</button>
+        </div>
+      </div>
+
+      <!-- Android Installation Guide Card -->
+      <div class="glass-card analysis-card">
+        <div class="analysis-card-title">🤖 Install on Android (2 Easy Ways)</div>
+        <div class="analysis-card-subtitle">Use immediately on your Android phone or compile a native APK</div>
+        <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; display: flex; flex-direction: column; gap: 8px;">
+          <div><strong style="color: var(--accent-primary);">1. Instant Android Fullscreen App:</strong> Open this file in Chrome on your Android phone, tap the <strong>⋮ menu → Add to Home screen</strong>. It launches fullscreen with offline storage, sound, and vibration.</div>
+          <div><strong style="color: var(--accent-gold);">2. Native Android Studio APK:</strong> Open the companion <code>NurZikr_Android_Studio_Project.zip</code> in Android Studio and click <strong>Build → Build Bundle(s) / APK(s) → Build APK(s)</strong> to generate a signed native Android <code>.apk</code>.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav-dock" aria-label="Primary Navigation">
+    <button class="nav-item-btn active" id="nav-counter" onclick="switchTab('counter')">
+      <span class="nav-icon">📿</span>
+      <span>Tasbih</span>
+    </button>
+    <button class="nav-item-btn" id="nav-analytics" onclick="switchTab('analytics')">
+      <span class="nav-icon">📊</span>
+      <span>Analytics</span>
+    </button>
+    <button class="nav-item-btn" id="nav-ranks" onclick="switchTab('ranks')">
+      <span class="nav-icon">🏆</span>
+      <span>Ranks</span>
+    </button>
+    <button class="nav-item-btn" id="nav-settings" onclick="switchTab('settings')">
+      <span class="nav-icon">⚙️</span>
+      <span>Options</span>
+    </button>
+  </nav>
+
+  <!-- Modal: Add Custom Zikr / Dua -->
+  <div class="modal-backdrop" id="add-zikr-modal">
+    <div class="glass-card modal-sheet">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div style="font-size: 16px; font-weight: 800;">➕ Add Custom Zikr or Dua</div>
+        <button class="icon-btn" style="width: 32px; height: 32px;" onclick="closeAddZikrModal()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Zikr Name / English Transliteration *</label>
+        <input type="text" class="glass-input" style="width: 100%;" id="custom-zikr-name" placeholder="e.g. Hasbunallahu wa ni'mal Wakil" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Arabic Script (Optional)</label>
+        <input type="text" class="glass-input" style="width: 100%; direction: rtl;" id="custom-zikr-ar" placeholder="حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">English Meaning (Optional)</label>
+        <input type="text" class="glass-input" style="width: 100%;" id="custom-zikr-en" placeholder="Allah is sufficient for us, and He is the best Disposer of affairs" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Bengali Pronunciation / Meaning (Optional)</label>
+        <input type="text" class="glass-input" style="width: 100%;" id="custom-zikr-bn" placeholder="হাসবুনাল্লাহু ওয়া নি'মাল ওয়াকিল" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Daily Target Count</label>
+        <input type="number" class="glass-input" style="width: 100%;" id="custom-zikr-target" value="100" min="1" />
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+        <button class="pill-action-btn" onclick="closeAddZikrModal()">Cancel</button>
+        <button class="primary-glass-btn" onclick="saveCustomZikr()">Save Zikr</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= DEFAULT SACRED ZIKR & DUAS (AR + EN + BN) =================
+    const DEFAULT_ZIKR_LIST = [
+      {
+        id: "subhanallah",
+        name: "SubhanAllah",
+        arabic: "سُبْحَانَ اللَّهِ",
+        en: "Glory be to Allah",
+        bn: "সুবহানাল্লাহ — আল্লাহ পবিত্র ও মহিমাময়",
+        target: 100,
+        category: "Daily Tasbih"
+      },
+      {
+        id: "alhamdulillah",
+        name: "Alhamdulillah",
+        arabic: "الْحَمْدُ لِلَّهِ",
+        en: "All praise is due to Allah",
+        bn: "আলহামদুলিল্লাহ — সকল প্রশংসা আল্লাহর জন্য",
+        target: 100,
+        category: "Gratitude"
+      },
+      {
+        id: "allahu_akbar",
+        name: "Allahu Akbar",
+        arabic: "اللَّهُ أَكْبَرُ",
+        en: "Allah is the Greatest",
+        bn: "আল্লাহু আকবার — আল্লাহ সর্বশ্রেষ্ঠ",
+        target: 100,
+        category: "Magnification"
+      },
+      {
+        id: "astaghfirullah",
+        name: "Astaghfirullah",
+        arabic: "أَسْتَغْفِرُ اللَّهَ",
+        en: "I seek forgiveness from Allah",
+        bn: "আস্তাগফিরুল্লাহ — আমি আল্লাহর কাছে ক্ষমা চাই",
+        target: 100,
+        category: "Istighfar"
+      },
+      {
+        id: "la_ilaha_illallah",
+        name: "La ilaha illallah",
+        arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ",
+        en: "There is no deity worthy of worship except Allah",
+        bn: "লা ইলাহা ইল্লাল্লাহ — আল্লাহ ছাড়া কোনো উপাস্য নেই",
+        target: 100,
+        category: "Tawheed"
+      },
+      {
+        id: "subhanallahi_wa_bihamdihi",
+        name: "SubhanAllahi wa bihamdihi",
+        arabic: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+        en: "Glory be to Allah and praise be to Him",
+        bn: "সুবহানাল্লাহি ওয়া বিহামদিহি — আল্লাহর পবিত্রতা ও প্রশংসা",
+        target: 100,
+        category: "Beloved Words"
+      },
+      {
+        id: "salawat",
+        name: "Salawat / Durood",
+        arabic: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ",
+        en: "O Allah, send peace and blessings upon Muhammad",
+        bn: "আল্লাহুম্মা সাল্লি আলা মুহাম্মাদ — দরুদ শরীফ",
+        target: 100,
+        category: "Blessings"
+      },
+      {
+        id: "la_hawla",
+        name: "La hawla wa la quwwata",
+        arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+        en: "There is no power nor strength except through Allah",
+        bn: "লা হাওলা ওয়ালা কুওয়াতা ইল্লা বিল্লাহ — জান্নাতের রত্নভাণ্ডার",
+        target: 100,
+        category: "Reliance"
+      }
+    ];
+
+    // ================= MILESTONE & RANK DEFINITIONS =================
+    const RANK_TIERS = [
+      { threshold: 100, title: "Salik (Seeker)", badge: "🌱", desc: "First 100 heartfelt remembrances" },
+      { threshold: 500, title: "Mudawim (Consistent)", badge: "🌿", desc: "500 steady steps in remembrance" },
+      { threshold: 1000, title: "Mukhlis (Devoted)", badge: "✨", desc: "1,000 luminous recitations" },
+      { threshold: 2000, title: "Munir (Illumined)", badge: "🌙", desc: "2,000 radiant praises of Allah" },
+      { threshold: 5000, title: "Sabir (Steadfast)", badge: "💎", desc: "5,000 anchored moments of peace" },
+      { threshold: 10000, title: "Mutma'innah (Tranquil Soul)", badge: "👑", desc: "10,000+ transcendent remembrances" }
+    ];
+
+    const SPIRITUAL_WINDOWS = [
+      { id: "fajr", label: "Fajr & Morning (5 AM – 12 PM)", icon: "🌅", matchHour: (h) => h >= 5 && h < 12 },
+      { id: "dhuhr", label: "Dhuhr & Noon (12 PM – 4 PM)", icon: "☀️", matchHour: (h) => h >= 12 && h < 16 },
+      { id: "asr", label: "Asr & Evening (4 PM – 6 PM)", icon: "🌤️", matchHour: (h) => h >= 16 && h < 18 },
+      { id: "maghrib", label: "Maghrib & Isha (6 PM – 12 AM)", icon: "🌙", matchHour: (h) => h >= 18 && h <= 23 },
+      { id: "tahajjud", label: "Tahajjud & Pre-Dawn (12 AM – 5 AM)", icon: "🌌", matchHour: (h) => h >= 0 && h < 5 }
+    ];
+
+    const SOUND_MODES = ["bead", "crystal", "zen", "mute"];
+    const SOUND_LABELS = {
+      bead: "🔊 Bead",
+      crystal: "🔔 Crystal",
+      zen: "🧘 Zen",
+      mute: "🔇 Mute"
+    };
+
+    // ================= STATE & LOCAL STORAGE ENGINE =================
+    const STORAGE_KEY = "nur_zikr_liquid_glass_state_v1";
+
+    let state = {
+      theme: "night",
+      langMode: "all",
+      soundMode: "bead",
+      vibration: true,
+      selectedZikrId: "subhanallah",
+      sessionCounts: {},
+      zikrList: [...DEFAULT_ZIKR_LIST],
+      logs: [] // Array of { id, zikrId, count, ts, mode }
+    };
+
+    let audioCtx = null;
+    let currentAnalyticsPeriod = "daily";
+
+    function loadState() {
+      let raw = null;
+      try {
+        raw = localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        raw = null;
+      }
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          state = { ...state, ...parsed };
+          if (!Array.isArray(state.zikrList) || state.zikrList.length === 0) {
+            state.zikrList = [...DEFAULT_ZIKR_LIST];
+          }
+          if (!Array.isArray(state.logs)) {
+            state.logs = [];
+          }
+        } catch (e) {
+          seedStarterHistory();
+        }
+      } else {
+        seedStarterHistory();
+      }
+      applyTheme();
+      updateSoundVibrateUI();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        // Fallback silently when running in restricted preview iframe
+      }
+    }
+
+    function seedStarterHistory() {
+      const now = new Date();
+      const sampleLogs = [];
+      const addSample = (zikrId, count, daysAgo, hour) => {
+        const d = new Date(now);
+        d.setDate(d.getDate() - daysAgo);
+        d.setHours(hour, 15, 0, 0);
+        sampleLogs.push({
+          id: "seed_" + Math.random().toString(36).slice(2, 9),
+          zikrId,
+          count,
+          ts: d.getTime(),
+          mode: "seed"
+        });
+      };
+      // Today's initial gentle counts
+      addSample("subhanallah", 100, 0, 6);
+      addSample("alhamdulillah", 100, 0, 13);
+      addSample("allahu_akbar", 100, 0, 19);
+      addSample("astaghfirullah", 100, 0, 22);
+      // Past week counts for immediate Daily/Weekly/Monthly/Yearly charts
+      addSample("subhanallah", 200, 1, 6);
+      addSample("astaghfirullah", 150, 1, 21);
+      addSample("alhamdulillah", 150, 2, 14);
+      addSample("allahu_akbar", 100, 3, 19);
+      addSample("salawat", 100, 4, 17);
+      addSample("subhanallah", 250, 5, 6);
+      addSample("astaghfirullah", 200, 6, 22);
+      state.logs = sampleLogs;
+      state.sessionCounts = { subhanallah: 33 };
+      saveState();
+    }
+
+    // ================= WEB AUDIO SYNTHESIZER & HAPTICS =================
+    function ensureAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+    }
+
+    function playTapSound(isMilestone = false) {
+      if (state.soundMode === "mute") return;
+      try {
+        ensureAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (isMilestone) {
+          // Harmonic celebratory chord
+          [528, 660, 792].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            gain.gain.setValueAtTime(0.001, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.14, now + idx * 0.06 + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.55);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.58);
+          });
+          return;
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        if (state.soundMode === "bead") {
+          // Warm wooden tasbih bead click
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(310, now);
+          osc.frequency.exponentialRampToValueAtTime(115, now + 0.045);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.048);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (state.soundMode === "crystal") {
+          // Liquid glass harmonic drop
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(740, now);
+          osc.frequency.exponentialRampToValueAtTime(980, now + 0.09);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.14);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (state.soundMode === "zen") {
+          // Soft low meditative pulse
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(432, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.22);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.23);
+        }
+      } catch (e) {}
+    }
+
+    function triggerHaptic(pattern = 14) {
+      if (!state.vibration) return;
+      try {
+        if (window.AndroidBridge && typeof window.AndroidBridge.vibrate === "function") {
+          window.AndroidBridge.vibrate(Array.isArray(pattern) ? 60 : pattern);
+        } else if (navigator.vibrate) {
+          navigator.vibrate(pattern);
+        }
+      } catch (e) {}
+    }
+
+    function cycleSoundMode() {
+      const idx = SOUND_MODES.indexOf(state.soundMode);
+      state.soundMode = SOUND_MODES[(idx + 1) % SOUND_MODES.length];
+      saveState();
+      updateSoundVibrateUI();
+      if (state.soundMode !== "mute") playTapSound(false);
+      showToast("🔊", "Sound Mode: " + SOUND_LABELS[state.soundMode]);
+    }
+
+    function toggleVibration() {
+      state.vibration = !state.vibration;
+      saveState();
+      updateSoundVibrateUI();
+      if (state.vibration) triggerHaptic(25);
+      showToast("📳", state.vibration ? "Haptic Vibration Enabled" : "Haptic Vibration Off");
+    }
+
+    function updateSoundVibrateUI() {
+      const soundBtn = document.getElementById("btn-sound-toggle");
+      const vibBtn = document.getElementById("btn-vibrate-toggle");
+      const statusSound = document.getElementById("status-sound-indicator");
+      const settingsSound = document.getElementById("settings-sound-btn");
+      const settingsVib = document.getElementById("settings-vibrate-btn");
+
+      soundBtn.textContent = state.soundMode === "mute" ? "🔇" : "🔊";
+      soundBtn.classList.toggle("active-toggle", state.soundMode !== "mute");
+      statusSound.textContent = SOUND_LABELS[state.soundMode];
+      if (settingsSound) settingsSound.textContent = SOUND_LABELS[state.soundMode];
+
+      vibBtn.classList.toggle("active-toggle", state.vibration);
+      if (settingsVib) settingsVib.textContent = state.vibration ? "📳 Enabled" : "📴 Off";
+    }
+
+    // ================= THEME & LANGUAGE CONTROLS =================
+    function toggleTheme() {
+      state.theme = state.theme === "night" ? "day" : "night";
+      applyTheme();
+      saveState();
+    }
+
+    function applyTheme() {
+      document.documentElement.setAttribute("data-theme", state.theme);
+      const btn = document.getElementById("btn-theme-toggle");
+      const metaTheme = document.getElementById("meta-theme-color");
+      if (state.theme === "night") {
+        btn.textContent = "🌙";
+        if (metaTheme) metaTheme.setAttribute("content", "#070D17");
+      } else {
+        btn.textContent = "☀️";
+        if (metaTheme) metaTheme.setAttribute("content", "#F4F3EE");
+      }
+    }
+
+    function setLanguageMode(mode) {
+      state.langMode = mode;
+      ["all", "en", "bn"].forEach((m) => {
+        const el = document.getElementById("lang-" + m);
+        if (el) el.classList.toggle("active", m === mode);
+      });
+      saveState();
+      renderActiveZikrCard();
+    }
+
+    // ================= CORE ZIKR LOGGING & COUNTER =================
+    function getSelectedZikr() {
+      return state.zikrList.find((z) => z.id === state.selectedZikrId) || state.zikrList[0];
+    }
+
+    function selectZikr(id) {
+      state.selectedZikrId = id;
+      saveState();
+      renderAll();
+    }
+
+    function getZikrLifetimeTotal(zikrId) {
+      return state.logs
+        .filter((l) => l.zikrId === zikrId)
+        .reduce((sum, l) => sum + l.count, 0);
+    }
+
+    function getZikrTodayTotal(zikrId) {
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      const minTs = startOfToday.getTime();
+      return state.logs
+        .filter((l) => l.zikrId === zikrId && l.ts >= minTs)
+        .reduce((sum, l) => sum + l.count, 0);
+    }
+
+    function getOverallLifetimeTotal() {
+      return state.logs.reduce((sum, l) => sum + l.count, 0);
+    }
+
+    function getOverallTodayTotal() {
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      const minTs = startOfToday.getTime();
+      return state.logs
+        .filter((l) => l.ts >= minTs)
+        .reduce((sum, l) => sum + l.count, 0);
+    }
+
+    function recordZikrIncrement(countToAdd, mode = "tap", customTimestamp = null) {
+      const zikr = getSelectedZikr();
+      const prevZikrTotal = getZikrLifetimeTotal(zikr.id);
+      const prevOverallTotal = getOverallLifetimeTotal();
+      const prevTodayZikr = getZikrTodayTotal(zikr.id);
+
+      const ts = customTimestamp || Date.now();
+      state.logs.push({
+        id: "log_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+        zikrId: zikr.id,
+        count: countToAdd,
+        ts,
+        mode
+      });
+
+      state.sessionCounts[zikr.id] = (state.sessionCounts[zikr.id] || 0) + countToAdd;
+
+      const newZikrTotal = prevZikrTotal + countToAdd;
+      const newOverallTotal = prevOverallTotal + countToAdd;
+      const newTodayZikr = prevTodayZikr + countToAdd;
+
+      // Check if a Rank Milestone (100, 500, 1000, 2000, 5000, 10000) was crossed
+      let unlockedMilestone = null;
+      for (const tier of RANK_TIERS) {
+        if (prevZikrTotal < tier.threshold && newZikrTotal >= tier.threshold) {
+          unlockedMilestone = `${tier.badge} ${zikr.name} reached ${tier.threshold.toLocaleString()} (${tier.title})!`;
+          break;
+        }
+        if (prevOverallTotal < tier.threshold && newOverallTotal >= tier.threshold) {
+          unlockedMilestone = `${tier.badge} Total Zikr reached ${tier.threshold.toLocaleString()} (${tier.title})!`;
+          break;
+        }
+      }
+
+      if (unlockedMilestone) {
+        playTapSound(true);
+        triggerHaptic([45, 60, 90]);
+        showToast("🏆", unlockedMilestone);
+      } else if (prevTodayZikr < zikr.target && newTodayZikr >= zikr.target) {
+        playTapSound(true);
+        triggerHaptic([35, 50, 75]);
+        showToast("✨", `Daily Target (${zikr.target}) completed for ${zikr.name}!`);
+      } else {
+        playTapSound(false);
+        triggerHaptic(14);
+      }
+
+      saveState();
+      renderAll();
+    }
+
+    function handleTap(event) {
+      const btn = document.getElementById("tasbih-orb-btn");
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement("span");
+      ripple.className = "ripple-circle";
+      const size = 90;
+      ripple.style.width = ripple.style.height = size + "px";
+      const clientX = event.clientX || (rect.left + rect.width / 2);
+      const clientY = event.clientY || (rect.top + rect.height / 2);
+      ripple.style.left = (clientX - rect.left - size / 2) + "px";
+      ripple.style.top = (clientY - rect.top - size / 2) + "px";
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 650);
+
+      // Subtle ambient orb shift
+      const orb1 = document.getElementById("bg-orb-1");
+      if (orb1) {
+        const shift = (Date.now() % 30) - 15;
+        orb1.style.transform = `translate(${shift}px, ${-shift}px)`;
+      }
+
+      recordZikrIncrement(1, "tap");
+    }
+
+    function addBatchCount(amount, label) {
+      const ts = getSelectedManualTimestamp();
+      recordZikrIncrement(amount, "batch", ts);
+      const zikr = getSelectedZikr();
+      showToast("📿", `Added +${amount.toLocaleString()} to ${zikr.name}`);
+    }
+
+    function getSelectedManualTimestamp() {
+      const windowVal = document.getElementById("manual-time-window").value;
+      if (windowVal === "now") return Date.now();
+      const d = new Date();
+      const hourMap = { fajr: 6, dhuhr: 13, asr: 16, maghrib: 19, tahajjud: 3 };
+      if (hourMap[windowVal] !== undefined) {
+        d.setHours(hourMap[windowVal], 30, 0, 0);
+      }
+      return d.getTime();
+    }
+
+    function submitManualCount() {
+      const input = document.getElementById("manual-count-input");
+      const val = parseInt(input.value, 10);
+      if (isNaN(val) || val <= 0) {
+        showToast("⚠️", "Please enter a valid positive number (e.g. 100)");
+        return;
+      }
+      const ts = getSelectedManualTimestamp();
+      recordZikrIncrement(val, "manual", ts);
+      input.value = "";
+      const zikr = getSelectedZikr();
+      showToast("✨", `Manually added +${val.toLocaleString()} to ${zikr.name}`);
+    }
+
+    function undoLastTap() {
+      const zikr = getSelectedZikr();
+      for (let i = state.logs.length - 1; i >= 0; i--) {
+        if (state.logs[i].zikrId === zikr.id) {
+          const removed = state.logs.splice(i, 1)[0];
+          state.sessionCounts[zikr.id] = Math.max(0, (state.sessionCounts[zikr.id] || 0) - removed.count);
+          saveState();
+          renderAll();
+          showToast("↩", `Removed last entry (-${removed.count}) from ${zikr.name}`);
+          return;
+        }
+      }
+      showToast("ℹ️", "No recent count to undo for this Zikr");
+    }
+
+    function resetSessionCount() {
+      const zikr = getSelectedZikr();
+      state.sessionCounts[zikr.id] = 0;
+      saveState();
+      renderAll();
+      showToast("🔄", `Session counter reset to 0 (Lifetime history preserved)`);
+    }
+
+    // ================= RENDER UI COMPONENTS =================
+    function renderAll() {
+      renderTopSummary();
+      renderZikrCarousel();
+      renderActiveZikrCard();
+      renderOrbCounter();
+      renderAnalytics();
+      renderRanks();
+    }
+
+    function renderTopSummary() {
+      const todayTotal = getOverallTodayTotal();
+      const lifetimeTotal = getOverallLifetimeTotal();
+      document.getElementById("stat-today-total").textContent = todayTotal.toLocaleString();
+      document.getElementById("stat-lifetime-total").textContent = lifetimeTotal.toLocaleString();
+
+      let activeRank = { badge: "🌱", title: "Seeker", tierIndex: 0 };
+      RANK_TIERS.forEach((t, idx) => {
+        if (lifetimeTotal >= t.threshold) {
+          activeRank = { badge: t.badge, title: t.title.split(" ")[0], tierIndex: idx + 1 };
+        }
+      });
+      document.getElementById("stat-rank-short").textContent = `${activeRank.badge} ${activeRank.title}`;
+      document.getElementById("current-rank-mini-badge").textContent = `${activeRank.badge} ${activeRank.title}`;
+    }
+
+    function renderZikrCarousel() {
+      const container = document.getElementById("zikr-carousel");
+      let html = "";
+      state.zikrList.forEach((z) => {
+        const isSelected = z.id === state.selectedZikrId;
+        const lifetime = getZikrLifetimeTotal(z.id);
+        html += `
+          <div class="zikr-chip ${isSelected ? "selected" : ""}" onclick="selectZikr('${z.id}')">
+            <div class="zikr-chip-top">
+              <span class="zikr-chip-name">${z.name}</span>
+              <span class="zikr-chip-count">${lifetime.toLocaleString()}</span>
+            </div>
+            <div class="zikr-chip-ar">${z.arabic || ""}</div>
+          </div>
+        `;
+      });
+      html += `<button class="add-zikr-chip" onclick="openAddZikrModal()">➕ New Zikr</button>`;
+      container.innerHTML = html;
+    }
+
+    function renderActiveZikrCard() {
+      const z = getSelectedZikr();
+      document.getElementById("active-zikr-badge").textContent = `✨ ${z.category || "Zikr & Dua"} • Daily Goal: ${z.target}`;
+      document.getElementById("active-zikr-arabic").textContent = z.arabic || z.name;
+      document.getElementById("active-zikr-translit").textContent = z.name;
+
+      const enEl = document.getElementById("active-zikr-en");
+      const bnEl = document.getElementById("active-zikr-bn");
+
+      enEl.textContent = z.en ? `"${z.en}"` : "";
+      bnEl.textContent = z.bn || "";
+
+      enEl.style.display = (state.langMode === "all" || state.langMode === "en") && z.en ? "block" : "none";
+      bnEl.style.display = (state.langMode === "all" || state.langMode === "bn") && z.bn ? "block" : "none";
+    }
+
+    function renderOrbCounter() {
+      const z = getSelectedZikr();
+      const sessionVal = state.sessionCounts[z.id] || 0;
+      const todayVal = getZikrTodayTotal(z.id);
+      const lifetimeVal = getZikrLifetimeTotal(z.id);
+      const target = z.target || 100;
+
+      document.getElementById("orb-session-count").textContent = sessionVal.toLocaleString();
+      document.getElementById("orb-target-progress").textContent = `Today: ${todayVal.toLocaleString()} / ${target.toLocaleString()}`;
+      document.getElementById("selected-zikr-total-pill").textContent = `${z.name} Total: ${lifetimeVal.toLocaleString()}`;
+
+      // Circular progress ring
+      const circumference = 647.17;
+      const cycleProgress = (todayVal % target) / target;
+      const ratio = todayVal >= target && todayVal % target === 0 ? 1 : cycleProgress;
+      const offset = circumference - ratio * circumference;
+      const circle = document.getElementById("orb-progress-circle");
+      if (circle) circle.style.strokeDashoffset = offset;
+    }
+
+    // ================= ANALYTICS ENGINE (DAILY, WEEKLY, MONTHLY, YEARLY) =================
+    function setAnalyticsPeriod(period) {
+      currentAnalyticsPeriod = period;
+      ["daily", "weekly", "monthly", "yearly"].forEach((p) => {
+        const btn = document.getElementById("period-" + p);
+        if (btn) btn.classList.toggle("active", p === period);
+      });
+      renderAnalytics();
+    }
+
+    function getFilteredLogsForPeriod(period) {
+      const now = new Date();
+      let startTs = 0;
+      let daysSpan = 1;
+
+      if (period === "daily") {
+        const start = new Date(now);
+        start.setHours(0, 0, 0, 0);
+        startTs = start.getTime();
+        daysSpan = 1;
+      } else if (period === "weekly") {
+        const start = new Date(now);
+        start.setDate(start.getDate() - 6);
+        start.setHours(0, 0, 0, 0);
+        startTs = start.getTime();
+        daysSpan = 7;
+      } else if (period === "monthly") {
+        const start = new Date(now);
+        start.setDate(start.getDate() - 29);
+        start.setHours(0, 0, 0, 0);
+        startTs = start.getTime();
+        daysSpan = 30;
+      } else if (period === "yearly") {
+        const start = new Date(now);
+        start.setMonth(start.getMonth() - 11, 1);
+        start.setHours(0, 0, 0, 0);
+        startTs = start.getTime();
+        daysSpan = 365;
+      }
+
+      const logs = state.logs.filter((l) => l.ts >= startTs);
+      return { logs, daysSpan };
+    }
+
+    function calculateStreakDays() {
+      if (state.logs.length === 0) return 0;
+      const dayKeys = new Set(
+        state.logs.map((l) => {
+          const d = new Date(l.ts);
+          return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+        })
+      );
+      let streak = 0;
+      const cursor = new Date();
+      while (true) {
+        const key = `${cursor.getFullYear()}-${cursor.getMonth()}-${cursor.getDate()}`;
+        if (dayKeys.has(key)) {
+          streak++;
+          cursor.setDate(cursor.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+      return Math.max(streak, dayKeys.size > 0 ? 1 : 0);
+    }
+
+    function renderAnalytics() {
+      const { logs, daysSpan } = getFilteredLogsForPeriod(currentAnalyticsPeriod);
+      const totalPeriodCount = logs.reduce((s, l) => s + l.count, 0);
+
+      const periodNames = {
+        daily: "Today's Total",
+        weekly: "Last 7 Days Total",
+        monthly: "Last 30 Days Total",
+        yearly: "Yearly Total (12 Mo)"
+      };
+      document.getElementById("kpi-period-label").textContent = periodNames[currentAnalyticsPeriod];
+      document.getElementById("kpi-period-total").textContent = totalPeriodCount.toLocaleString();
+      const avgPerDay = Math.round(totalPeriodCount / daysSpan);
+      document.getElementById("kpi-period-avg").textContent =
+        currentAnalyticsPeriod === "daily"
+          ? `${logs.length} sessions today`
+          : `Avg ${avgPerDay.toLocaleString()} / day`;
+
+      // Which Zikr I do most
+      const byZikr = {};
+      state.zikrList.forEach((z) => (byZikr[z.id] = 0));
+      logs.forEach((l) => {
+        byZikr[l.zikrId] = (byZikr[l.zikrId] || 0) + l.count;
+      });
+
+      const sortedZikr = Object.entries(byZikr)
+        .map(([id, count]) => {
+          const z = state.zikrList.find((item) => item.id === id) || { name: id, arabic: "" };
+          return { id, name: z.name, arabic: z.arabic, count };
+        })
+        .sort((a, b) => b.count - a.count);
+
+      const topZikr = sortedZikr[0];
+      if (topZikr && topZikr.count > 0) {
+        const pct = Math.round((topZikr.count / totalPeriodCount) * 100);
+        document.getElementById("kpi-top-zikr-name").textContent = topZikr.name;
+        document.getElementById("kpi-top-zikr-share").textContent = `${topZikr.count.toLocaleString()} (${pct}%)`;
+      } else {
+        document.getElementById("kpi-top-zikr-name").textContent = "No entries yet";
+        document.getElementById("kpi-top-zikr-share").textContent = "Tap orb to start";
+      }
+
+      // When I do most (Spiritual windows)
+      const windowTotals = {};
+      SPIRITUAL_WINDOWS.forEach((w) => (windowTotals[w.id] = 0));
+      logs.forEach((l) => {
+        const hour = new Date(l.ts).getHours();
+        const win = SPIRITUAL_WINDOWS.find((w) => w.matchHour(hour)) || SPIRITUAL_WINDOWS[0];
+        windowTotals[win.id] += l.count;
+      });
+
+      const sortedWindows = SPIRITUAL_WINDOWS.map((w) => ({
+        ...w,
+        count: windowTotals[w.id] || 0
+      })).sort((a, b) => b.count - a.count);
+
+      const peakWin = sortedWindows[0];
+      if (peakWin && peakWin.count > 0) {
+        const pct = Math.round((peakWin.count / totalPeriodCount) * 100);
+        document.getElementById("kpi-peak-window").textContent = `${peakWin.icon} ${peakWin.label.split(" (")[0]}`;
+        document.getElementById("kpi-peak-window-sub").textContent = `${peakWin.count.toLocaleString()} (${pct}% of period)`;
+      } else {
+        document.getElementById("kpi-peak-window").textContent = "—";
+        document.getElementById("kpi-peak-window-sub").textContent = "Log Zikr to analyze";
+      }
+
+      // Streak KPI
+      const streak = calculateStreakDays();
+      document.getElementById("kpi-streak-days").textContent = `${streak} ${streak === 1 ? "Day" : "Days"}`;
+      document.getElementById("kpi-total-sessions").textContent = `${state.logs.length} lifetime entries`;
+
+      // Render Timeline Bar Chart
+      renderTimelineBarChart(currentAnalyticsPeriod, logs);
+
+      // Render "When I Do Most" Progress List
+      const whenContainer = document.getElementById("when-window-list");
+      whenContainer.innerHTML = sortedWindows
+        .map((w) => {
+          const pct = totalPeriodCount > 0 ? Math.round((w.count / totalPeriodCount) * 100) : 0;
+          return `
+            <div class="window-row">
+              <div class="window-row-header">
+                <span>${w.icon} ${w.label}</span>
+                <span style="color: var(--accent-primary);">${w.count.toLocaleString()} (${pct}%)</span>
+              </div>
+              <div class="window-progress-track">
+                <div class="window-progress-fill" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      // Render "Which Zikr I Do Most" Breakdown List
+      const whichContainer = document.getElementById("which-zikr-list");
+      whichContainer.innerHTML = sortedZikr
+        .map((item) => {
+          const pct = totalPeriodCount > 0 ? Math.round((item.count / totalPeriodCount) * 100) : 0;
+          return `
+            <div class="window-row">
+              <div class="window-row-header">
+                <span>${item.name} <span style="color: var(--accent-gold); font-size: 12px; margin-left: 4px;">${item.arabic || ""}</span></span>
+                <span style="color: var(--accent-primary);">${item.count.toLocaleString()} (${pct}%)</span>
+              </div>
+              <div class="window-progress-track">
+                <div class="window-progress-fill" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function renderTimelineBarChart(period, logs) {
+      const chartEl = document.getElementById("timeline-bar-chart");
+      const titleEl = document.getElementById("timeline-chart-title");
+      const subEl = document.getElementById("timeline-chart-subtitle");
+      const now = new Date();
+      let buckets = [];
+
+      if (period === "daily") {
+        titleEl.textContent = "🕰️ Today's Hourly Distribution";
+        subEl.textContent = "Recitations grouped into 3-hour windows across today";
+        const labels = ["3a", "6a", "9a", "12p", "3p", "6p", "9p", "11p"];
+        buckets = labels.map((lbl, idx) => {
+          const startH = idx * 3;
+          const endH = startH + 3;
+          const val = logs
+            .filter((l) => {
+              const h = new Date(l.ts).getHours();
+              return h >= startH && h < endH;
+            })
+            .reduce((s, l) => s + l.count, 0);
+          return { label: lbl, value: val };
+        });
+      } else if (period === "weekly") {
+        titleEl.textContent = "📅 Last 7 Days Breakdown";
+        subEl.textContent = "Daily Zikr totals across the past week";
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(now);
+          d.setDate(d.getDate() - i);
+          const y = d.getFullYear(), m = d.getMonth(), date = d.getDate();
+          const val = logs
+            .filter((l) => {
+              const ld = new Date(l.ts);
+              return ld.getFullYear() === y && ld.getMonth() === m && ld.getDate() === date;
+            })
+            .reduce((s, l) => s + l.count, 0);
+          buckets.push({ label: i === 0 ? "Today" : dayNames[d.getDay()], value: val });
+        }
+      } else if (period === "monthly") {
+        titleEl.textContent = "🌙 Monthly 5-Day Windows (Last 30 Days)";
+        subEl.textContent = "6 five-day blocks across the last 30 days";
+        for (let b = 5; b >= 0; b--) {
+          const startDaysAgo = (b + 1) * 5;
+          const endDaysAgo = b * 5;
+          const startTs = new Date(now.getFullYear(), now.getMonth(), now.getDate() - startDaysAgo + 1).getTime();
+          const endTs = new Date(now.getFullYear(), now.getMonth(), now.getDate() - endDaysAgo + 1, 23, 59, 59).getTime();
+          const val = logs
+            .filter((l) => l.ts >= startTs && l.ts <= endTs)
+            .reduce((s, l) => s + l.count, 0);
+          buckets.push({ label: b === 0 ? "Now" : `-${startDaysAgo}d`, value: val });
+        }
+      } else if (period === "yearly") {
+        titleEl.textContent = "🗓️ 12-Month Yearly Overview";
+        subEl.textContent = "Monthly totals across the past 12 months";
+        const monthShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        for (let i = 7; i >= 0; i--) {
+          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          const y = d.getFullYear(), m = d.getMonth();
+          const val = logs
+            .filter((l) => {
+              const ld = new Date(l.ts);
+              return ld.getFullYear() === y && ld.getMonth() === m;
+            })
+            .reduce((s, l) => s + l.count, 0);
+          buckets.push({ label: monthShort[m], value: val });
+        }
+      }
+
+      const maxVal = Math.max(...buckets.map((b) => b.value), 1);
+      chartEl.innerHTML = buckets
+        .map((b) => {
+          const heightPct = Math.max(6, Math.round((b.value / maxVal) * 86));
+          const isPeak = b.value > 0 && b.value === maxVal;
+          return `
+            <div class="bar-col">
+              <span class="bar-val-top">${b.value > 0 ? b.value.toLocaleString() : ""}</span>
+              <div class="bar-pillar ${isPeak ? "peak" : ""}" style="height: ${heightPct}%;"></div>
+              <span class="bar-label-bottom">${b.label}</span>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // ================= RANKS & MILESTONES ENGINE =================
+    function renderRanks() {
+      const lifetime = getOverallLifetimeTotal();
+      let currentTier = null;
+      let nextTier = RANK_TIERS[0];
+
+      for (let i = 0; i < RANK_TIERS.length; i++) {
+        if (lifetime >= RANK_TIERS[i].threshold) {
+          currentTier = RANK_TIERS[i];
+          nextTier = RANK_TIERS[i + 1] || null;
+        }
+      }
+
+      const heroIcon = document.getElementById("rank-hero-icon");
+      const heroTitle = document.getElementById("rank-hero-title");
+      const heroNext = document.getElementById("rank-hero-next-text");
+      const heroProg = document.getElementById("rank-hero-progress");
+
+      if (!currentTier) {
+        heroIcon.textContent = "🌱";
+        heroTitle.textContent = "Aspiring Seeker";
+        const rem = Math.max(0, 100 - lifetime);
+        heroNext.textContent = `${rem.toLocaleString()} more Zikr to unlock ${RANK_TIERS[0].title} (100)`;
+        heroProg.style.width = `${Math.min(100, Math.round((lifetime / 100) * 100))}%`;
+      } else if (nextTier) {
+        heroIcon.textContent = currentTier.badge;
+        heroTitle.textContent = currentTier.title;
+        const rem = Math.max(0, nextTier.threshold - lifetime);
+        heroNext.textContent = `${rem.toLocaleString()} more Zikr to unlock ${nextTier.title} (${nextTier.threshold.toLocaleString()})`;
+        const span = nextTier.threshold - currentTier.threshold;
+        const prog = Math.round(((lifetime - currentTier.threshold) / span) * 100);
+        heroProg.style.width = `${Math.min(100, Math.max(6, prog))}%`;
+      } else {
+        heroIcon.textContent = currentTier.badge;
+        heroTitle.textContent = currentTier.title;
+        heroNext.textContent = `Highest Milestone Unlocked (${lifetime.toLocaleString()} Total Zikr)`;
+        heroProg.style.width = "100%";
+      }
+
+      // Render 6 Milestone Badge Cards
+      let unlockedCount = 0;
+      const gridEl = document.getElementById("rank-tiers-grid");
+      gridEl.innerHTML = RANK_TIERS.map((tier) => {
+        const unlocked = lifetime >= tier.threshold;
+        if (unlocked) unlockedCount++;
+        const pct = Math.min(100, Math.round((lifetime / tier.threshold) * 100));
+        return `
+          <div class="glass-card rank-badge-card ${unlocked ? "unlocked" : ""}">
+            <div class="rank-badge-top">
+              <span class="rank-icon">${tier.badge}</span>
+              <span class="rank-status-pill">${unlocked ? "Unlocked ✓" : `${pct}%`}</span>
+            </div>
+            <div class="rank-target-num">${tier.threshold.toLocaleString()} Times</div>
+            <div class="rank-title-name">${tier.title}</div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">${tier.desc}</div>
+            <div class="window-progress-track">
+              <div class="window-progress-fill" style="width: ${pct}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("unlocked-badges-counter").textContent = `${unlockedCount} / ${RANK_TIERS.length} Unlocked`;
+
+      // Render Per-Zikr Rank Mastery
+      const perZikrEl = document.getElementById("per-zikr-ranks-list");
+      perZikrEl.innerHTML = state.zikrList
+        .map((z) => {
+          const count = getZikrLifetimeTotal(z.id);
+          let zRank = "Starter (<100)";
+          let zBadge = "•";
+          let nextTarget = 100;
+          for (let i = 0; i < RANK_TIERS.length; i++) {
+            if (count >= RANK_TIERS[i].threshold) {
+              zRank = `${RANK_TIERS[i].threshold.toLocaleString()}+ (${RANK_TIERS[i].title.split(" ")[0]})`;
+              zBadge = RANK_TIERS[i].badge;
+              nextTarget = RANK_TIERS[i + 1] ? RANK_TIERS[i + 1].threshold : RANK_TIERS[i].threshold;
+            }
+          }
+          const pct = Math.min(100, Math.round((count / nextTarget) * 100));
+          return `
+            <div class="window-row">
+              <div class="window-row-header">
+                <span>${zBadge} <strong>${z.name}</strong> <span style="color: var(--text-secondary); font-size: 11px;">(${zRank})</span></span>
+                <span style="color: var(--accent-gold);">${count.toLocaleString()} / ${nextTarget.toLocaleString()}</span>
+              </div>
+              <div class="window-progress-track">
+                <div class="window-progress-fill" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // ================= NAVIGATION & MODALS =================
+    function switchTab(tabId) {
+      ["counter", "analytics", "ranks", "settings"].forEach((t) => {
+        document.getElementById("tab-" + t).classList.toggle("active", t === tabId);
+        document.getElementById("nav-" + t).classList.toggle("active", t === tabId);
+      });
+      renderAll();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openAddZikrModal() {
+      document.getElementById("add-zikr-modal").classList.add("open");
+    }
+
+    function closeAddZikrModal() {
+      document.getElementById("add-zikr-modal").classList.remove("open");
+    }
+
+    function saveCustomZikr() {
+      const name = document.getElementById("custom-zikr-name").value.trim();
+      const arabic = document.getElementById("custom-zikr-ar").value.trim();
+      const en = document.getElementById("custom-zikr-en").value.trim();
+      const bn = document.getElementById("custom-zikr-bn").value.trim();
+      const target = parseInt(document.getElementById("custom-zikr-target").value, 10) || 100;
+
+      if (!name) {
+        showToast("⚠️", "Please enter a Zikr or Dua name");
+        return;
+      }
+
+      const id = "custom_" + Date.now();
+      state.zikrList.push({
+        id,
+        name,
+        arabic: arabic || "ذِكْرُ اللَّهِ",
+        en: en || "Custom Remembrance & Dua",
+        bn: bn || "",
+        target,
+        category: "Custom Dua"
+      });
+      state.selectedZikrId = id;
+      saveState();
+      closeAddZikrModal();
+      renderAll();
+      showToast("✨", `Added "${name}" to your Zikr list`);
+    }
+
+    function seedRichSampleData() {
+      const now = new Date();
+      const zikrIds = state.zikrList.map((z) => z.id);
+      const hoursPool = [5, 6, 7, 13, 14, 16, 19, 20, 21, 22, 3];
+      for (let d = 0; d < 60; d++) {
+        const entriesPerDay = d < 7 ? 3 : 1;
+        for (let e = 0; e < entriesPerDay; e++) {
+          const zId = zikrIds[(d + e) % zikrIds.length];
+          const hour = hoursPool[(d * 3 + e) % hoursPool.length];
+          const dt = new Date(now);
+          dt.setDate(dt.getDate() - d);
+          dt.setHours(hour, 20, 0, 0);
+          state.logs.push({
+            id: "rich_" + d + "_" + e + "_" + Math.random().toString(36).slice(2, 6),
+            zikrId: zId,
+            count: [33, 100, 100, 200][(d + e) % 4],
+            ts: dt.getTime(),
+            mode: "sample"
+          });
+        }
+      }
+      saveState();
+      renderAll();
+      showToast("✨", "Loaded 60-day history! Check Analytics & Ranks tabs.");
+    }
+
+    function clearAllHistory() {
+      state.logs = [];
+      state.sessionCounts = {};
+      saveState();
+      renderAll();
+      showToast("🗑", "All Zikr counts reset to 0");
+    }
+
+    function exportDataJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const a = document.createElement("a");
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", "nur_zikr_backup.json");
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast("⬇", "Backup JSON downloaded");
+    }
+
+    let toastTimer = null;
+    function showToast(icon, message) {
+      const banner = document.getElementById("toast-banner");
+      document.getElementById("toast-icon").textContent = icon;
+      document.getElementById("toast-text").textContent = message;
+      banner.classList.add("show");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => banner.classList.remove("show"), 3100);
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const el = document.getElementById("android-clock");
+      if (el) el.textContent = `${hh}:${mm}`;
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      renderAll();
+      updateClock();
+      setInterval(updateClock, 30000);
+    });
+  </script>
+</body>
+</html>
