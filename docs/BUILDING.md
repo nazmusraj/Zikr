@@ -27,4 +27,8 @@ The helper script places the user-friendly APK at `dist/Nur-Zikr-test.apk`. Grad
 ./gradlew assembleDebug lintDebug
 ```
 
-The app interface lives in `app/src/main/assets/index.html`. The Android WebView host and native haptic bridge live in `app/src/main/java/com/nurzikr/tasbih/MainActivity.kt`.
+The app interface lives in `app/src/main/assets/index.html`. The Android WebView host, native haptic bridge, Supabase OAuth/session handling, and low-write synchronization client live in `app/src/main/java/com/nurzikr/tasbih/MainActivity.kt`.
+
+The Supabase URL and publishable key in the Android client are intentionally public client configuration. Never add the Google OAuth client secret, database password, service-role key, or release-keystore password to the app.
+
+Google sign-in also requires the one-time dashboard configuration in [GOOGLE_SIGN_IN.md](GOOGLE_SIGN_IN.md).

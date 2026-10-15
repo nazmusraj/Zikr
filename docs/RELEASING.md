@@ -32,8 +32,8 @@ Never commit the keystore or passwords. Preserve the keystore securely: future A
 Update `versionCode` and `versionName` in `app/build.gradle.kts`, commit the change, then push a matching tag:
 
 ```bash
-git tag v1.0.0
-git push origin main v1.0.0
+git tag v1.1.0
+git push origin main v1.1.0
 ```
 
 GitHub Actions will validate the app, build and verify the signed release APK, create release notes, and attach `Nur-Zikr.apk` automatically.
