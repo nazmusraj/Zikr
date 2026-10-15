@@ -28,8 +28,10 @@ import java.net.URL
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.security.SecureRandom
-import java.time.LocalDate
-import java.time.ZoneId
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.Executors
 
@@ -309,7 +311,8 @@ class NurZikrCloudBridge(
                 "GET",
                 null
             )
-            val cutoff = LocalDate.now().minusDays(89).toString()
+            val cutoffCalendar = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -89) }
+            val cutoff = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(cutoffCalendar.time)
             val recent = authenticatedRequest(
                 "/rest/v1/daily_progress?select=progress_date,zikr_id,total_count&progress_date=gte.${encoded(cutoff)}&order=progress_date.asc&limit=10000",
                 "GET",
@@ -426,7 +429,7 @@ class NurZikrCloudBridge(
         val user = prefs.getString(USER_JSON, null)?.let { runCatching { JSONObject(it) }.getOrNull() } ?: return
         val id = user.optString("id")
         if (id.isBlank()) return
-        val zone = runCatching { ZoneId.systemDefault().id }.getOrDefault("UTC")
+        val zone = runCatching { TimeZone.getDefault().id }.getOrDefault("UTC")
         apiRequest(
             "/rest/v1/profiles?user_id=eq.${encoded(id)}",
             "PATCH",
